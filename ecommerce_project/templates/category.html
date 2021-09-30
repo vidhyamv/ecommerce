@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+  {% if category %}
+    {{category.description|truncatewords:155}}
+  {% else %}
+    Welcome to Glamours where you can buys different items.....
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+
+{% if category %}
+  {{category.name}} -Glamours
+{% else %}
+  See Our New Collections - Glamours
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+{% if category %}
+<div>
+  <div class="row my_row_class">
+    <div class="mx_auto">
+    <p><a href="{% url 'ecommerce:allprodcat' %}">Our Product Collections</a></p>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="mx_auto">
+  {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title"><b> {{category.name}} </b></h1>
+  <p class="text-justify"> {{category.description}} </p>
+</div>
+  {% else %}
+    <div>
+      <img class="my_img my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1200px;" height="500px;">
+    </div>
+    <br>
+    <div>
+      <h1 class="text-center my_title"><b>Our Products Collections </b></h1>
+      <p class="text-justify"> Glamorous Hangups offers carefully curated wall art that will reflect your style and taste. From canvas wall art to quote wall art to handmade metal wall art we have a beautiful gallery right here. We can even offer personalised wall art for you. Find your next piece of wall art online at Glamorous Hangups.</p>
+    </div>
+  {% endif %}
+
+<div class="container">
+  <div class="row mx_auto">
+    {% for product in products.object_list %}
+    <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+      <div class="card text-center" style="min-width:18rem;min-height:18rem;">
+        <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+        <div class="card-body">
+          <h4> {{product.name}} </h4>
+          <p> ${{product.price}} </p>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+</div>
+  <div class="max_auto">
+    {% if products.paginator.num_pages > 1 %}
+    <div class="text-center">
+      {% for pg in products.paginator.page_range %}
+      <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} aqctive {% endif %}">{{pg}}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <br>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
